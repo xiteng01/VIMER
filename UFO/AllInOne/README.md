@@ -1,94 +1,97 @@
+English | [简体中文](README_ch.md)
+
 # AllInOne
 
-- [任务介绍](#任务介绍)
-- [数据集介绍](#数据集介绍)
-  * [训练集](#训练集)
-  * [测试集](#测试集)
-- [方法介绍](#方法介绍)
-  * [基础框架](#基础框架)
-  * [统一各任务的配置](#统一各任务的配置)
-  * [异构BatchVs同构Batch](#异构BatchVs同构Batch)
-  * [任务过拟合问题](#任务过拟合问题)
-- [UFO与单任务SOTA结果对比](#UFO与单任务SOTA结果对比)
+- [Introduction](#Introduction)
+- [Datasets](#Datasets)
+  * [TrainingSet](#TrainingSet)
+  * [TestSet](#TestSet)
+- [Methodology](#Methodology)
+  * [Framework](#Framework)
+  * [UnifiedSettings](#UnifiedSettings)
+  * [HeterogeneousBatchVsisomorphismBatch](#HeterogeneousBatchVsisomorphismBatch)
+  * [TaskOverfitting](#TaskOverfitting)
+- [ComparedWithSOTA](#ComparedWithSOTA)
 
-## 任务介绍
-UFO 这个技术设想的出发点是视觉的大一统，即一个模型能够覆盖所有主流的视觉任务。我们从垂类应用出发，选择了人脸、人体、车辆、商品四个任务作为视觉模型大一统的第一步。AllInOne的目标是，一个模型超过四个任务的 SOTA 结果。
+## Introduction
+The starting point of UFO's technical vision is the unification of vision, that is, a model can cover all mainstream visual tasks. Starting from vertical applications, we selected four tasks of Face, Person, Vehicle, and Products as the first step to unify the visual model. The goal of AllInOne is to achieve SOTA results for one model over four tasks.
+## Datasets
+We used the public datasets of Face, Person, Vehicle, Products as follows:
+### TrainingSet
 
-## 数据集介绍
-我们使用了脸、人体、车辆、商品的公开数据集具体如下:
-
-### 训练集
-
-| **任务**                      | **数据集**                     | **图片数**                     | **类别数**                     |
+| **Tasks**                     | **Datesets**                   |       **Img Number**           |       **ID Number**            |
 | :-----------------------------| :----------------------------: | :----------------------------: | :----------------------------: |
-| 人脸                          |           MS1M-V3              |           5,179,510            |           93,431               |
-| 人体                          |           Market1501-Train     |           12,936               |           751                  |
-| 人体                          |           DukeMTMC-Train       |           16,522               |           702                  |
-| 人体                          |           MSMT17-Train         |           30,248               |           1,041                |
-| 车辆                          |           Veri-776-Train       |           37,778               |           576                  |
-| 车辆                          |           VehicleID-Train      |           113,346              |           13,164               |
-| 车辆                          |           VeriWild-Train       |           277,797              |           30,671               |
-| 商品                          |           SOP-Train            |           59,551               |           11,318               |
+| Face                          |           MS1M-V3              |           5,179,510            |           93,431               |
+| Person                        |           Market1501-Train     |           12,936               |           751                  |
+| Person                        |           DukeMTMC-Train       |           16,522               |           702                  |
+| Person                        |           MSMT17-Train         |           30,248               |           1,041                |
+| Vehicle                       |           Veri-776-Train       |           37,778               |           576                  |
+| Vehicle                       |           VehicleID-Train      |           113,346              |           13,164               |
+| Vehicle                       |           VeriWild-Train       |           277,797              |           30,671               |
+| Products                      |           SOP-Train            |           59,551               |           11,318               |
 
 
-### 测试集
+### TestSet
 
-| **任务**                      | **数据集**                     | **图片数**                     | **类别数**                     |
+| **Tasks**                     | **Datesets**                   |       **Img Number**           |       **ID Number**            |
 | :-----------------------------| :----------------------------: | :----------------------------: | :----------------------------: |
-| 人脸                          |           LFW                  |           12,000               |           -                    |
-| 人脸                          |           CPLFW                |           12,000               |           -                    |
-| 人脸                          |           CFP-FF               |           14,000               |           -                    |
-| 人脸                          |           CFP-FP               |           14,000               |           -                    |
-| 人脸                          |           CALFW                |           12,000               |           -                    |
-| 人脸                          |           AGEDB-30             |           12,000               |           -                    |
-| 人体                          |           Market1501-Test      |           19,281               |           750                  |
-| 人体                          |           DukeMTMC-Test        |           19,889               |           702                  |
-| 人体                          |           MSMT17-Test          |           93,820               |           3,060                |
-| 车辆                          |           Veri-776-Test        |           13,257               |           200                  |
-| 车辆                          |           VehicleID-Test       |           19,777               |           2,400                |
-| 车辆                          |           VeriWild-Test        |           138,517              |           10,000               |
-| 商品                          |           SOP-Test             |           60,502               |           11,316               |
+| Face                          |           LFW                  |           12,000               |           -                    |
+| Face                          |           CPLFW                |           12,000               |           -                    |
+| Face                          |           CFP-FF               |           14,000               |           -                    |
+| Face                          |           CFP-FP               |           14,000               |           -                    |
+| Face                          |           CALFW                |           12,000               |           -                    |
+| Face                          |           AGEDB-30             |           12,000               |           -                    |
+| Person                        |           Market1501-Test      |           19,281               |           750                  |
+| Person                        |           DukeMTMC-Test        |           19,889               |           702                  |
+| Person                        |           MSMT17-Test          |           93,820               |           3,060                |
+| Vehicle                       |           Veri-776-Test        |           13,257               |           200                  |
+| Vehicle                       |           VehicleID-Test       |           19,777               |           2,400                |
+| Vehicle                       |           VeriWild-Test        |           138,517              |           10,000               |
+| Products                      |           SOP-Test             |           60,502               |           11,316               |
 
-## 方法介绍
+## Methodology
 
-### 基础框架
-给定4个任务，我们从各个任务中采样一些数据组成一个 batch，将该 batch 输入给共享的 Transformer 骨干网络，最后分出 4 个头部网络，每个头部网络负责一个任务的输出。4 个任务分别计算损失后求和作为总的损失。使用 SGD 优化器进行模型优化。
+### Framework
+Given 4 tasks, we sample some data from each task to form a batch, input the batch to the shared Transformer backbone network, and finally separate 4 head networks, each of which is responsible for the output of a task. The 4 tasks separately calculate the loss and sum it up as the total loss. Model optimization using the SGD optimizer.
 
-### 统一各任务的配置
-由于不同任务使用的输入大小以及模型结构都差异较大。从模型优化的层面来说，batch size 大小、学习率大小乃至于优化器都各不相同。为了方便后续的多任务训练，我们首先统一各个任务的模型结构以及优化方法。特别地，我们使用 Transformer 作为骨干网络。统一后的配置如下表所示：
+### UnifiedSettings
 
-|                               |        **人脸**/ **人体**/**商品**/**车辆**          |
+Because the input size and model structure used by different tasks are quite different. From the model optimization level, the batch size, learning rate and even the optimizer are all different. In order to facilitate subsequent multi-task training, we first unify the model structure and optimization method of each task. In particular, we use Transformer as the backbone network. The unified configuration is shown in the following table:
+|                               |      **Face**/ **Person**/**Products**/**Vehicle**   |
 | :-----------------------------| :----------------------------------------------------|
-| 输入大小                      |    384 × 384                                         |
+| Input Size                    |    384 × 384                                         |
 | Batch Size                    |    1024/512/512/512                                  |
-| 数据增强                      |    Flipping + Random Erasing + AutoAug               |
-| 模型结构                      |    ViT-Large                                         |
-| 输出特征维度                  |    1024                                              |
-| 损失函数                      |    CosFace Loss/(CosFace Loss + Triplet Loss)*3      |
-| 优化器                        |    SGD                                               |
-| 初始学习率                    |    0.2                                               |
+| Augmentation                  |    Flipping + Random Erasing + AutoAug               |
+| Model                         |    ViT-Large                                         |
+| Feature Dim                   |    1024                                              |
+| Loss                          |    CosFace Loss/(CosFace Loss + Triplet Loss)*3      |
+| Optimizer                     |    SGD                                               |
+| Init LR                       |    0.2                                               |
 | LR scheduler                  |    Warmup + Cosine LR                                |
-| 迭代次数                      |    100,000                                           |
+| Iterations                    |    100,000                                           |
 
-### 异BatchVs同构Batch 
-多任务学习首先面临的问题是如何构建 Batch。常用的方式有两种，一种是同构的 Batch 组成，即 Batch 内的数据均来自同一个任务，通过不同的 Batch 选择不同的任务来保证训练所有任务。另一种是异构的 Batch 组成，即Batch 内的数据来自不同的任务。
+### HeterogeneousBatchVsisomorphismBatch 
 
-同构的 Batch 组成面临的问题是当模型中使用 Batch Norm 这一常见的操作时，因为训练时的统计值（单任务统计值）和测试时的统计值（多任务统计值）差异较大，导致模型效果较差。我们使用ResNet50结构在人体 Market1501 和商品SOP两个任务中验证该结论。如表所示，使用异构 Batch 混合可以大幅提高两任务的效果。因此，我们采用异构Batch。
+The first problem faced by multi-task learning is how to build a Batch. There are two commonly used methods, one is composed of isomorphic batches, that is, the data in the batch comes from the same task, and different tasks are selected through different batches to ensure that all tasks are trained. The other is heterogeneous batch composition, that is, the data in the batch comes from different tasks.
 
-|    Batch 数据混合    |         Market1501 (rank1/mAP)    |        SOP (rank1)        |
+The problem with isomorphic Batch composition is that when the common operation of Batch Norm is used in the model, because the statistical value during training (single-task statistical value) and the statistical value during testing (multi-task statistical value) are quite different, lead to poor model performance. We use the ResNet50 structure to verify this conclusion in two tasks, Person Market1501 and ProductsSOP. As shown in the table, using heterogeneous batch mixing can greatly improve the performance of the two tasks. Therefore, we adopt heterogeneous Batch.
+
+|    Batch Type        |         Market1501 (rank1/mAP)    |        SOP (rank1)        |
 | :--------------------| :--------------------------------:|:-------------------------:|
-|  同构                |           73.13 / 50.58           |          79.54            |
-|  异构                |           94.27 / 85.77           |          85.76            |
+|  Heterogeneous       |           73.13 / 50.58           |          79.54            |
+|  isomorphis          |           94.27 / 85.77           |          85.76            |
 
-### 任务过拟合问题
-在我们的四个任务中，人体和商品的训练集数量最小，都只有 6 万张图片左右，而人脸和车辆则各有约 500 万和 40 万张图片。因此在多任务训练过程中，呈现出了人体、商品快速过拟合，而人脸和车辆欠拟合的现象。为此我们探索了较多不同的手段，其中较为有效的是使用 Drop Path 正则化方法。如表所示，在将 drop path rate 从 0.1 增大到 0.2 后，人体和商品任务有较大提升，同时其他任务效果持平或更好。
+### TaskOverfitting
+
+Among our four tasks, Person and Products have the smallest training sets with only about 60,000 images, while Face and Vehicle have about 5 million and 400,000 images respectively. Therefore, in the multi-task training process, Person and Products are rapidly over-fitted, while Face and Vehicle are under-fitted.
+The phenomenon. To this end, we have explored many different methods, the most effective of which is to use the Drop Path regularization method. As shown in the table, after increasing the drop path rate from 0.1 to 0.2, the Person and Products tasks have a large improvement, while other tasks have the same or better performance.
 
 |        Model     | DropPath |  CALFW | CPLFW  |  LFW  | CFP-FF | CFP-FP | AGEDB-30 | Market1501  | DukeMTMC    | MSMT17      |   Veri776   |  VehicleID  |  VeriWild   |  SOP  |
 | :----------------|----------|--------| :------|-------|--------|--------|---------:|:------------|-------------|-------------|-------------|-------------|-------------|------:|
 |  UFO (ViT-Large) | 0.1      |  96.18 | 94.22  | 99.83 |  99.90 |  99.09 |   98.17  | 96.17/91.67 | 92.01/84.63 | 86.21/68.94 | 97.62/88.66 | 85.35/90.09 | 93.31/77.98 | 87.11 |
 |  UFO (ViT-Large) | 0.2      |  95.92 | 94.30  | 99.82 |  99.90 |  99.11 |   98.03  | 96.28/92.75 | 92.55/86.19 | 88.10/72.17 | 97.74/89.25 | 87.62/91.32 | 93.62/78.91 | 89.23 |
 
-## UFO与单任务SOTA结果对比
+## ComparedWithSOTA
 
 |        Model     |  CALFW | CPLFW  |  LFW  | CFP-FF | CFP-FP | AGEDB-30 | Market1501  | DukeMTMC    | MSMT17      |   Veri776   |  VehicleID  |  VeriWild   |  SOP  |
 | :----------------|--------| :------|-------|--------|--------|---------:|:------------|-------------|-------------|-------------|-------------|-------------|------:|
